@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tablero de Pobreza en México</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart','bar','geochart']});
+    google.charts.setOnLoadCallback(drawCharts);
+
+    function drawCharts() {
+      // Estados
+      var estados = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Coahuila','Colima','Chiapas','Chihuahua','CDMX','Durango','Guanajuato','Guerrero','Hidalgo','Jalisco','México','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora','Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas'];
+
+      var years = [2008,2010,2012,2014,2016,2018];
+
+      // Pobreza total %
+      var dataPobreza = [
+        [37.6,26.0,21.4,45.9,32.7,27.4,77.0,32.1,27.6,48.8,44.1,68.4,55.2,36.7,43.6,55.4,48.8,41.1,21.4,61.8,60.4,35.2,33.8,47.4,32.4,27.1,53.3,33.8,59.6,51.2,47.0,50.1],
+        [38.1,31.5,31.0,50.7,27.8,34.7,78.5,38.8,28.5,48.9,48.5,67.6,54.7,37.0,42.9,54.7,43.2,41.0,21.0,67.0,61.5,41.1,34.0,47.8,36.3,33.1,57.2,38.9,60.7,58.0,48.9,60.2],
+        [37.8,30.8,30.1,51.7,27.9,34.4,74.7,35.3,28.9,45.9,44.5,69.7,52.8,39.8,45.5,54.2,45.5,43.2,23.0,61.9,62.4,36.9,38.0,47.4,35.7,29.1,55.1,36.6,57.8,52.6,48.9,54.2],
+        [34.8,30.2,30.3,43.6,30.4,34.3,76.2,34.4,28.4,44.7,46.6,65.2,54.3,35.4,49.6,59.2,52.3,40.5,20.4,66.8,64.5,34.2,38.2,49.1,35.7,29.4,49.6,38.0,58.9,61.8,45.9,52.3],
+        [28.2,25.0,22.1,48.3,27.6,30.8,77.1,30.9,27.6,40.5,42.4,64.4,50.6,31.8,47.9,55.3,49.5,37.7,14.2,70.4,59.4,31.1,28.8,44.6,30.8,27.9,50.7,32.2,53.9,62.2,45.4,46.8],
+        [26.2,23.0,18.1,46.2,25.2,28.5,76.4,26.3,30.6,37.9,43.4,66.5,50.6,28.4,42.7,46.0,50.8,34.8,14.2,66.4,58.9,27.6,27.6,42.4,30.7,28.2,50.7,35.1,48.4,61.8,46.3,46.0]
+      ];
+
+      // Pobreza extrema %
+      var dataExtrema = [
+        [4.2,3.3,2.7,11.9,3.1,1.7,38.7,6.1,2.1,11.5,7.9,32.4,15.3,4.4,6.9,15.4,8.7,6.2,2.6,28.3,19.0,5.5,7.7,15.4,4.6,4.1,15.8,4.8,9.5,16.8,11.6,10.8],
+        [3.8,3.4,3.0,13.8,2.5,2.5,41.7,5.8,2.2,10.5,8.4,31.8,13.3,5.0,6.5,13.4,6.9,8.3,2.4,29.2,17.4,4.6,6.3,12.0,5.6,4.5,13.6,5.4,10.1,18.4,11.8,10.5],
+        [3.4,3.7,3.1,10.4,2.0,4.0,38.4,4.6,2.5,7.5,6.0,31.7,11.5,5.8,5.8,14.4,6.3,8.8,2.4,23.3,15.0,5.2,8.0,12.0,5.4,4.3,14.0,4.7,10.2,17.0,11.7,7.5],
+        [2.1,1.6,1.9,11.6,1.4,3.4,38.2,3.7,1.7,5.3,5.5,24.5,9.8,3.2,4.4,9.4,7.9,7.9,1.3,26.3,13.2,2.9,4.2,7.3,3.0,2.1,13.4,2.9,6.4,16.4,10.6,5.7],
+        [2.3,1.1,1.9,7.7,1.3,2.8,29.7,3.0,1.8,2.8,4.4,23.0,8.6,2.3,4.1,6.1,5.9,5.0,1.2,26.9,10.5,2.6,3.5,6.0,2.4,1.7,10.9,2.4,5.3,17.1,10.4,4.9],
+        [1.2,1.0,1.6,6.3,1.1,2.3,28.2,2.6,1.7,2.3,3.8,22.4,7.4,2.1,4.1,6.1,7.4,5.0,1.0,26.3,9.6,2.3,3.3,5.3,2.1,1.5,10.7,2.2,5.2,17.7,10.3,4.6]
+      ];
+
+      // Personas en pobreza (miles)
+      var dataPersonas = [
+        [435.3,456.8,467.6,442.9,369.7,351.5],
+        [809.7,1019.8,1010.1,984.9,789.1,848.4],
+        [130.5,203.0,211.3,226.2,175.6,151.7],
+        [373.1,391.2,387.1,386.1,370.5,370.1],
+        [885.8,775.9,799.3,885.8,745.9,691.1],
+        [243.4,231.4,237.2,233.4,210.7,207.6],
+        [3682.3,3866.3,3782.3,3961.0,4140.6,4174.6],
+        [1106.1,1371.6,1272.7,1265.5,1150.0,1005.7],
+        [2465.7,2537.2,2565.3,2502.5,2434.4,2682.7],
+        [791.4,864.2,858.7,761.2,643.8,680.0],
+        [2403.6,2703.7,2525.8,2683.3,2489.7,2587.0],
+        [2319.6,2230.0,2442.6,2315.4,2314.7,2412.2],
+        [1443.6,1477.1,1406.1,1547.8,1478.8,1311.3],
+        [2657.1,2766.7,2711.1,2780.6,2620.3,2546.5],
+        [6578.2,6721.7,6328.7,6786.0,6280.3,6247.5],
+        [2411.2,2424.8,2447.7,2708.6,2565.2,2161.9],
+        [857.6,782.2,843.5,993.7,965.9,1013.3],
+        [444.1,432.4,498.8,488.3,470.1,470.3],
+        [976.3,904.4,1132.9,1022.7,737.8,773.0],
+        [2354.2,2596.4,2532.6,2680.5,2684.2,2684.2],
+        [3705.6,3666.3,3878.3,3958.5,3728.2,3763.7],
+        [629.1,767.0,707.4,757.6,635.7,579.2],
+        [518.1,560.3,560.3,649.3,564.3,564.3],
+        [1304.4,1375.3,1354.2,1338.1,1267.7,1229.0],
+        [905.6,1008.1,1035.8,1033.2,1010.1,1010.1],
+        [716.9,1021.9,1021.9,1021.9,863.6,863.6],
+        [1188.0,1291.3,1291.3,1291.3,1291.3,1291.3],
+        [1097.7,1211.1,1211.1,1211.1,1211.1,1211.1],
+        [698.1,711.9,711.9,711.9,701.1,645.8],
+        [5611.3,5829.0,5938.0,6093.6,5825.5,5873.7],
+        [2957.8,3221.6,3122.8,3230.6,3126.4,3123.1],
+        [1573.0,1578.0,1567.8,1577.6,1574.7,1576.2]
+      ];
+
+      // --- Gráfico 1: Evolución promedio pobreza ---
+      var data1 = new google.visualization.DataTable();
+      data1.addColumn('string','Año');
+      data1.addColumn('number','Pobreza promedio');
+      for(var i=0;i<dataPobreza.length;i++){
+        var total=0; for(var j=0;j<estados.length;j++) total+=dataPobreza[i][j];
+        data1.addRow([years[i].toString(), total/estados.length]);
+      }
+      var chart1 = new google.visualization.LineChart(document.getElementById('chart1'));
+      chart1.draw(data1,{title:'Evolución promedio de pobreza (2008-2018)', height:400, legend:{position:'none'}});
+
+      // --- Gráfico 2: Personas en pobreza por estado (2018) ---
+      var data2 = new google.visualization.DataTable();
+      data2.addColumn('string','Estado'); data2.addColumn('number','Personas en pobreza (miles)');
+      for(var i=0;i<estados.length;i++) data2.addRow([estados[i],dataPersonas[i][5]]);
+      var chart2 = new google.visualization.ColumnChart(document.getElementById('chart2'));
+      chart2.draw(data2,{title:'Personas en pobreza por estado (2018)', height:400, legend:{position:'none'}});
+
+      // --- Gráfico 3: Pobreza total vs extrema (2018) ---
+      var data3 = new google.visualization.DataTable();
+      data3.addColumn('string','Estado'); data3.addColumn('number','Total (%)'); data3.addColumn('number','Extrema (%)');
+      for(var i=0;i<estados.length;i++) data3.addRow([estados[i],dataPobreza[5][i],dataExtrema[5][i]]);
+      var chart3 = new google.visualization.ColumnChart(document.getElementById('chart3'));
+      chart3.draw(data3,{title:'Pobreza total vs extrema por estado (2018)', height:400, isStacked:true});
+
+      // --- Gráfico 4: Reducción pobreza 2008-2018 ---
+      var data4 = new google.visualization.DataTable();
+      data4.addColumn('string','Estado'); data4.addColumn('number','Reducción (%)');
+      for(var i=0;i<estados.length;i++) data4.addRow([estados[i],dataPobreza[0][i]-dataPobreza[5][i]]);
+      var chart4 = new google.visualization.ColumnChart(document.getElementById('chart4'));
+      chart4.draw(data4,{title:'Reducción de pobreza 2008-2018 por estado', height:400, legend:{position:'none'}});
+
+      // --- Gráfico 5: Mapa de calor pobreza total 2018 ---
+      var data5 = new google.visualization.DataTable();
+      data5.addColumn('string','Estado'); data5.addColumn('number','Pobreza total 2018');
+      for(var i=0;i<estados.length;i++) data5.addRow([estados[i],dataPobreza[5][i]]);
+      var chart5 = new google.visualization.GeoChart(document.getElementById('chart5'));
+      chart5.draw(data5,{
+        region:'MX',
+        displayMode:'regions',
+        resolution:'provinces',
+        colorAxis:{colors:['#ffffcc','#ff9900','#cc0000']},
+        legend:{textStyle:{color:'black', fontSize:12}}
+      });
+
+    }
+  </script>
+</head>
+<body>
+  <h1>Tablero de Pobreza en México</h1>
+  <div id="chart1" style="width:100%; margin-bottom:50px;"></div>
+  <div id="chart2" style="width:100%; margin-bottom:50px;"></div>
+  <div id="chart3" style="width:100%; margin-bottom:50px;"></div>
+  <div id="chart4" style="width:100%; margin-bottom:50px;"></div>
+  <div id="chart5" style="width:100%; height:600px; margin-bottom:50px;"></div>
+</body>
+</html>
